@@ -1,0 +1,6 @@
+.idea/
+dist/
+node_modules/
+tests/__coverage__/
+
+.DS_Store
