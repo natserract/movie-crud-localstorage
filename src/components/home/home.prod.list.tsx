@@ -1,8 +1,5 @@
 
 import * as React from 'react'
-import useCtx from '../hooks';
-
-import t from '../../context/context.types';
 import "./home.scss";
 
 const ProductionList:React.FC<{

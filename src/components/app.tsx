@@ -1,7 +1,8 @@
 import * as React from "react";
 import { hot } from "react-hot-loader";
 
-import Provider from '../context/';
+import { Provider } from '../context';
+
 import Header from './header/header';
 import Home from './home/home';
 

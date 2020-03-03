@@ -6,7 +6,7 @@ import * as Global from '../global/mod';
 
 const reactLogo = require("../../assets/img/brand.png");
 
-const Header: React.FC = () => {
+const Header = () => {
     return (
         <header className="header">
             <Global.Container>

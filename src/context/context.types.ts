@@ -4,7 +4,7 @@ export interface State {
     name: string,
 }
 
-export default interface Provider {
+export interface Provider {
     productionHouse: State[],
 }
 
