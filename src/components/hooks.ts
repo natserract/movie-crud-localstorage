@@ -4,9 +4,13 @@ import { createCtx } from '../context';
 import * as RootReducer from '../context/context.reducer';
 
 export function useCtx(){
-    const [Context] = createCtx(RootReducer.reducer, RootReducer.initialState);
-    const { state } = React.useContext(Context);
-    return { state }
+    const [Context, Provider] = createCtx(RootReducer.reducer, RootReducer.initialState);
+    const { state, dispatch } = React.useContext(Context);
+    return {
+        state,
+        dispatch,
+        Provider
+    }
 }
 
 export function useLocalStorageReducer<StateType, ActionType>(

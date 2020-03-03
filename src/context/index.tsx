@@ -23,10 +23,6 @@ export function createCtx<StateType, ActionType>(
         const [state, dispatch] = useLocalStorageReducer(reducer, initialState);
         const value = {state, dispatch};
 
-        React.useEffect(() => {
-            localStorage.setItem("info", JSON.stringify(state));
-        }, [state]);
-
         return (
             <MenuContext.Provider value={value} {...props}/>
         )
@@ -35,5 +31,3 @@ export function createCtx<StateType, ActionType>(
     return [MenuContext, Provider] as const
 }
 
-
-export const [Context, Provider] = createCtx(RootReducer.reducer, RootReducer.initialState);
