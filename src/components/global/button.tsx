@@ -1,17 +1,8 @@
 
 import * as React from 'react';
+import "./global.scss";
 
 type CSS = React.CSSProperties;
-
-const style: CSS = {
-    padding: '15px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    outline: 0,
-    boxShadow: 'none',
-    color: '#fff',
-    fontSize: '18px',
-}
 
 const Button: React.FC<{
     children: React.ReactNode,
@@ -24,7 +15,7 @@ const Button: React.FC<{
     };
 
     return (
-        <button style={{...style, ...buttonBackground}} onClick={props.onClick}>
+        <button className="button-global" style={{...buttonBackground}} onClick={props.onClick}>
             { props.children }
         </button>
     )

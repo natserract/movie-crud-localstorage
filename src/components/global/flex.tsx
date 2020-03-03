@@ -1,17 +1,13 @@
 
 import * as React from 'react';
-
-const style: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-};
+import "./global.scss";
 
 const Flex: React.FC<{
     children: React.ReactNode
 }> = (props) => {
 
     return (
-        <div style={style}>
+        <div className="flex">
             {props.children}
         </div>
     )

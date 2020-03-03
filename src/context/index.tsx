@@ -1,15 +1,39 @@
-
 import * as React from 'react';
-import  Store, { Context } from './context.store';
+import * as RootReducer from './context.reducer';
+import { useLocalStorageReducer } from '../components/hooks';
 
-const Provider: React.FC<{
-    children: React.ReactNode
-}> = (props) => {
-    return (
-        <Context.Provider value={{...Store}}>
-            { props.children }
-        </Context.Provider>
-    )
+
+export function createCtx<StateType, ActionType>(
+    reducer: React.Reducer<StateType, ActionType>,
+    initialState: StateType,
+) {
+
+    const defaultDispatch: React.Dispatch<ActionType> = () => initialState;
+
+    const MenuContext = React.createContext<{
+        state: typeof initialState,
+        dispatch: (action: ActionType) => void;
+    }>({
+        state: initialState,
+        dispatch: defaultDispatch
+    });
+
+    // tslint:disable-next-line: no-shadowed-variable
+    function Provider(props: React.PropsWithChildren<{}>) {
+        const [state, dispatch] = useLocalStorageReducer(reducer, initialState);
+        const value = {state, dispatch};
+
+        React.useEffect(() => {
+            localStorage.setItem("info", JSON.stringify(state));
+        }, [state]);
+
+        return (
+            <MenuContext.Provider value={value} {...props}/>
+        )
+    }
+
+    return [MenuContext, Provider] as const
 }
 
-export default Provider;
+
+export const [Context, Provider] = createCtx(RootReducer.reducer, RootReducer.initialState);
