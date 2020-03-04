@@ -59,7 +59,5 @@
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
   },
-  "dependencies": {
-    "uuid": "^7.0.1"
-  }
+  "dependencies": {}
 }

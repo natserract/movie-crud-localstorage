@@ -1,10 +1,10 @@
 
-export interface State {
-    id: number,
-    name: string,
+
+export interface IProductionHouse {
+    id?: string,
+    name?: string
 }
 
 export interface Provider {
-    productionHouse: State[],
+    productionHouse: IProductionHouse[]
 }
-

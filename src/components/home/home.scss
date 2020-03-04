@@ -3,3 +3,21 @@
     background: #eff6fe;
     padding: 30px 16px;
 }
+
+.box-production-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .box-production-content {
+        padding: 20px;
+        border-radius: 10px;
+        color: #fff;
+        width: 120px;
+        height: 120px;
+        margin-right: 20px;
+        flex: 0 0 auto;
+        text-align: center;
+    }
+}

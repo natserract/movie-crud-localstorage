@@ -1,61 +1,89 @@
 
 import * as React from 'react';
 
-import * as Global from '../global/mod';
-import { useCtx } from '../hooks';
-import ProductionHouseList from './home.prod.list';
-
+import { Fragment, Container, Modal, Flex, Button } from '../global/mod';
+import { useCtx, useCtxDispatch } from '../hooks';
+import ProductionList from './home.prod.list';
 
 import "./home.scss";
 
 const Home = () => {
     const [display, setDisplay] = React.useState<{
-        show: boolean}>({
-            show: false
-        });
+        show: boolean,
+        contentT?: boolean
+    }>({ show: false, contentT: false });
 
-    // Example usage
-    const state = useCtx();
-    console.log(state);
+    const [state, setState] = React.useState<{
+        id: string,
+        name: string
+    }>({
+        id: "",
+        name: ""
+    });
 
-    const ModalProps = {
-        display: display.show ? 'block': 'none' ,
-        onClick: () => {
+    const { productionHouse } = useCtx();
+    const dispatch = useCtxDispatch();
+
+    const modalProps = {
+        display: display.show ? 'block' : 'none',
+        addAction: () => {
             setDisplay({
-                show: !display.show
-            })
+                show: !display.show,
+            });
         },
-        headerContent: "Add New Production House"
+        value: state.name,
+        contentType: display.contentT,
+        headerContent: display.contentT ? "Edit Production House" : "Add New Production House",
+        deleteAction: () => {
+           dispatch({
+               type: "DELETE",
+               payload: state.id
+           });
+           setDisplay({
+                show: !display.show
+           })
+        },
+        closeModal: () => {
+            setDisplay({
+                show: !display.show,
+            })
+        }
     };
 
     return (
-        <Global.Fragment>
+        <Fragment>
             <section className="content-production-house">
-                <Global.Container>
-                    <Global.Flex>
+                <Container>
+                    <Flex>
                         <div className="prod-title">
                             <h2>Production House</h2>
                         </div>
                         <div className="prod-action">
-                        <Global.Button onClick={() => setDisplay({ show: !display.show })} backgroundColor="#004c8c">
+                            <Button
+                                onClick={() => setDisplay({ show: !display.show })}
+                                backgroundColor="#004c8c">
                                 Add Production House
-                        </Global.Button>
-
-                        { display.show ? (
-                            <Global.Modal {...ModalProps}>
-                                Hello
-                            </Global.Modal>
-                            ) : null
-                        }
+                            </Button>
                         </div>
-                    </Global.Flex>
+                    </Flex>
 
                     <div className="prod-list-content">
-                        {/* <ProductionHouseList renderItems={Consumer.productionHouse}/> */}
+                        <ProductionList onClick={(t) => {
+                                setDisplay({
+                                    show: !display.show,
+                                    contentT: !display.contentT,
+                                });
+                                setState({
+                                    id: t.id,
+                                    name: t.name
+                                })
+                            }
+                        } renderItems={productionHouse}/>
                     </div>
-                </Global.Container>
+                </Container>
             </section>
-        </Global.Fragment>
+            { display.show ? <Modal {...modalProps}> Hello </Modal> : null}
+        </Fragment>
     )
 }
 

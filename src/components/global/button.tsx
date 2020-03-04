@@ -6,7 +6,7 @@ type CSS = React.CSSProperties;
 
 const Button: React.FC<{
     children: React.ReactNode,
-    onClick: React.MouseEventHandler,
+    onClick: React.MouseEventHandler | any,
     backgroundColor: string,
 }> = (props) => {
 

@@ -29,6 +29,10 @@ $primaryColor: #004c8c;
     overflow: auto; 
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.4); 
+    
+    &.modal-hide {
+        display: none !important;
+    };
 
     >.modal-content {
         background-color: #fefefe;
@@ -97,7 +101,11 @@ $primaryColor: #004c8c;
             }
         }
     }
-    
 }
 
 
+
+.box-production-content {
+    cursor: pointer;
+    background: #004c8c;
+}

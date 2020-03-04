@@ -1,51 +1,73 @@
 
-
 import * as React from 'react';
+import { useCtxDispatch, useRand }  from "../hooks";
+import { AddModalFormProd } from './modal.form';
 
 type CSSDisplay = 'block' | 'none';
 
-interface PropsI {
+interface PropsI{
+    addAction: React.MouseEventHandler,
     children: React.ReactNode,
-    display?: string | CSSDisplay,
-    onClick?: React.MouseEventHandler,
-    headerContent?: string
+    closeModal: React.MouseEventHandler,
+    display: string | CSSDisplay,
+    contentType: boolean,
+    headerContent: string,
+    value: string,
 }
 
-// Modal production house
 const Modal: React.FC<PropsI> = (props) => {
+    const dispatch = useCtxDispatch();
+    const [state, setState] = React.useState<{id?: any, name: string}>({
+        id: useRand(),
+        name: ""
+    });
+
     const style: React.CSSProperties = {
         display: props.display
     };
 
+    const [display, setDisplay] = React.useState<{
+        show: boolean,
+    }>({ show: false });
+
+    const handleCloseModal =  {
+        display: display.show ?  'modal-hide' : 'modal-show'
+    }
+
+    const handleChange = (event) => {
+        event.persist();
+        setState({
+            ...state,
+            [event.target.name]: event.target.value,
+        });
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        dispatch({
+            type: 'ADD',
+            payload: state.name
+        });
+        setState({ name: "" });
+        setDisplay({
+            show: !display.show
+        });
+    }
+
     return (
-        <div id="modal" className="modal" style={style}>
+        <div id="modal" className={`modal ${handleCloseModal.display}`} style={style} >
             <div className="modal-content">
-                <span className="close" onClick={props.onClick}>&times;</span>
+                <span className="close" onClick={props.addAction}>&times;</span>
                 <div className="modal-header">
                     <span>{props.headerContent}</span>
                 </div>
                 <div className="modal-form">
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                    }}>
-                        <div className="modal-form__inner">
-                            <div className="form-group">
-                                <label>
-                                    Production House Name
-                                    <span className="icon-required">*</span>
-                                </label>
-                                <input type="text" placeholder="Enter production house name" required name="prod_house_name" />
-                            </div>
-                        </div>
-                        <div className="modal-form__action">
-                            <button type="reset" value="Cancel" onClick={props.onClick}>
-                                Cancel
-                            </button>
-                            <button type="submit" value="Save Data">
-                                Save Data
-                            </button>
-                        </div>
-                    </form>
+                    <AddModalFormProd
+                        onSubmit={(e) => handleSubmit(e)}
+                        onChange={(e) => handleChange(e)}
+                        inputValue={state.name}
+                        closeModal={props.closeModal}
+                    />
                 </div>
             </div>
         </div>

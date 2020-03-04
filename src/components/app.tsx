@@ -1,21 +1,18 @@
 import * as React from "react";
 import { hot } from "react-hot-loader";
 
-import { useCtx } from '../components/hooks';
-
+import { Store as StoreProvider } from '../context';
 import Header from './header/header';
 import Home from './home/home';
 
-import "./../assets/scss/app.scss";
+import "./../assets/scss/global.scss";
 
 const App: React.FC = () => {
-    const { Provider } = useCtx();
-
     return (
-        <Provider>
+        <StoreProvider>
             <Header/>
             <Home/>
-        </Provider>
+        </StoreProvider>
     )
 }
 
