@@ -1,54 +1,59 @@
 
 import * as React from 'react';
 
-import { Fragment, Container, Modal, Flex, Button } from '../global/mod';
+import { Fragment, Container, ModalAddProd, ModalEditProd, Flex, Button } from '../global/mod';
 import { useCtx, useCtxDispatch } from '../hooks';
 import ProductionList from './home.prod.list';
+import { reducer, initialState } from './home.action';
 
 import "./home.scss";
 
 const Home = () => {
-    const [display, setDisplay] = React.useState<{
-        show: boolean,
-        contentT?: boolean
-    }>({ show: false, contentT: false });
-
-    const [state, setState] = React.useState<{
-        id: string,
-        name: string
-    }>({
-        id: "",
-        name: ""
-    });
-
-    const { productionHouse } = useCtx();
     const dispatch = useCtxDispatch();
+    const [val, valDispatch] = React.useReducer(reducer, initialState);
+    const { productionHouse } = useCtx();
 
-    const modalProps = {
-        display: display.show ? 'block' : 'none',
-        addAction: () => {
-            setDisplay({
-                show: !display.show,
-            });
-        },
-        value: state.name,
-        contentType: display.contentT,
-        headerContent: display.contentT ? "Edit Production House" : "Add New Production House",
-        deleteAction: () => {
-           dispatch({
-               type: "DELETE",
-               payload: state.id
-           });
-           setDisplay({
-                show: !display.show
+    const modalAddProps = {
+        closeModal: () => {
+           valDispatch({
+               type: 'SETDISPLAY'
            })
         },
-        closeModal: () => {
-            setDisplay({
-                show: !display.show,
-            })
-        }
+        headerContent: "Add New Production House",
+        display: val.modalProdAddShow ? 'block' : 'none',
     };
+
+    const modalEditProps = {
+        closeModal: () => {
+            valDispatch({
+                type: 'SETMODEDIT'
+            })
+         },
+         headerContent: "Edit Production House",
+         display: val.modalProdEditShow ? 'block' : 'none',
+         deleteAction: () => {
+             dispatch({
+                 type: 'DELETE',
+                 payload: val.value.id
+             });
+             valDispatch({ type: 'SETMODEDIT'})
+         },
+         inputValue: {
+             id: val.value.id,
+             name: val.value.name
+         },
+         onSubmit: (event) => {
+            event.preventDefault();
+            dispatch({
+                type: 'EDIT',
+                payload: {
+                    id: val.value.id,
+                }
+            });
+        }
+    }
+
+    console.log(val.value.name);
 
     return (
         <Fragment>
@@ -59,8 +64,7 @@ const Home = () => {
                             <h2>Production House</h2>
                         </div>
                         <div className="prod-action">
-                            <Button
-                                onClick={() => setDisplay({ show: !display.show })}
+                            <Button onClick={() => valDispatch({ type: 'SETDISPLAY'})}
                                 backgroundColor="#004c8c">
                                 Add Production House
                             </Button>
@@ -69,20 +73,24 @@ const Home = () => {
 
                     <div className="prod-list-content">
                         <ProductionList onClick={(t) => {
-                                setDisplay({
-                                    show: !display.show,
-                                    contentT: !display.contentT,
-                                });
-                                setState({
+                            valDispatch({
+                                type: 'SETMODEDIT'
+                            });
+                             valDispatch({
+                                type: 'SETNAME',
+                                payload: {
                                     id: t.id,
                                     name: t.name
-                                })
+                                }
+                            });
                             }
                         } renderItems={productionHouse}/>
                     </div>
                 </Container>
             </section>
-            { display.show ? <Modal {...modalProps}> Hello </Modal> : null}
+
+            { val.modalProdEditShow ? <ModalEditProd {...modalEditProps}/> : null}
+            { val.modalProdAddShow ? <ModalAddProd {...modalAddProps}/> : null}
         </Fragment>
     )
 }

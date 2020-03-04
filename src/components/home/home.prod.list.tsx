@@ -5,12 +5,11 @@ import * as Global from '../global/mod';
 
 const ProductionList: React.FC<{
     renderItems: any,
-    onClick: any,
+    onClick: (e: any) => void,
 }> = (props) => {
     const [display, setDisplay] = React.useState<{
         show?: boolean,
-        contentT?: boolean,
-    }>({ show: false, contentT: false });
+    }>({ show: false });
 
 
     return (

@@ -1,11 +1,13 @@
-
+// tslint:disable  
 import { Provider } from './context.types';
 import { initialState } from '../data/data';
 import { useRand as uniqueid, useSaveStore } from '../components/hooks';
 
 export type Action =
   | { type: 'ADD'; payload: string}
-  | { type: 'EDIT'; payload: string}
+  | { type: 'EDIT'; payload: {
+    id: string,
+  }}
   | { type: 'DELETE'; payload: string};
 
 
@@ -24,9 +26,17 @@ export const reducer = (state: Provider = initialState, action: Action): Provide
           }
       }
       case 'EDIT': {
+          const key = {
+            index: [...state.productionHouse].find(item => {
+              return {
+                id: item.id == action.payload.id,
+              }
+            })
+          };
+          console.log(key.index.name);
+
           return {
-            productionHouse: [...state.productionHouse].map(t =>
-                t.id === action.payload ? {...t} : t)
+              ...state,
           }
       }
       case 'DELETE': {
@@ -38,4 +48,3 @@ export const reducer = (state: Provider = initialState, action: Action): Provide
         throw new Error();
     }
 }
-
