@@ -1,5 +1,6 @@
 
 $primaryColor: #004c8c;
+$color: #0277bd;
 
 .flex {
     display: flex;
@@ -42,6 +43,7 @@ $primaryColor: #004c8c;
         padding: 20px 0 20px;
         border-radius: 10px;
         position: relative;
+        overflow: auto;
         
         > .close {
             color: #aaaaaa;
@@ -73,6 +75,7 @@ $primaryColor: #004c8c;
                 padding: 20px;
                 border-top: solid 1px $primaryColor;
                 border-bottom: solid 1px $primaryColor;
+                overflow: auto;
 
                 .form-group {
                     >label {
@@ -86,7 +89,7 @@ $primaryColor: #004c8c;
                     }
                 }
 
-                input {
+                input, select {
                     width: 100%;
                     border-radius: 5px;
                     border: solid 1px #e0e0e0;
@@ -94,6 +97,11 @@ $primaryColor: #004c8c;
                     box-sizing: border-box;
                     box-shadow: 0;
                     outline: 0;
+                    height: 30px;
+                }
+                
+                select {
+                    cursor: pointer;
                 }
             }
             .modal-form__action {
@@ -104,8 +112,18 @@ $primaryColor: #004c8c;
 }
 
 
-
 .box-production-content {
     cursor: pointer;
     background: #004c8c;
+}
+
+.form-add-movie {
+    .form-group {
+        width: 46%;
+        float: left;
+        margin-bottom: 20px;
+        &:not(:nth-child(2), :nth-child(4)) {
+            padding-right: 20px;
+        }
+    }
 }

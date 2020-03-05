@@ -1,29 +1,32 @@
-import { stat } from "fs";
 
+import { IProductionHouse, IMoviePayload } from '../../context/context.types';
 
-interface State {
-    value: {
-        id?: string,
-        name: string,
-    },
+interface HouseState {
+    value: IProductionHouse,
     modalProdAddShow: boolean,
     modalProdEditShow: boolean,
 };
 
-type Action =
-    | { type: 'SETDISPLAY'; }
-    | { type: 'SETNAME'; payload: {
-            id: string,
-            name: string,
-        }
-    }
-    | { type: 'SETMODEDIT' }
-    | { type: 'PUSHNEWSTATE', payload: {
-        id?: string,
-        name: string
-    } }
+interface MovieState {
+    value: IMoviePayload,
+    modalMovieAddShow: boolean,
+    modalMovieEditShow: boolean,
+}
 
-export const initialState: State = {
+type Action =
+    | { type: 'TOGGLEMODALADD' }
+    | { type: 'TOGGLEMODALEDIT' }
+    | { type: 'GETEDITDATA', payload: { id: string, name: string}}
+    | { type: 'PUSHNEWDATA', payload: IProductionHouse};
+
+type MovieAction =
+    | { type: 'TOGGLEMODALADD' }
+    | { type: 'TOGGLEMODALEDIT' }
+    | { type: 'GETEDITDATA', payload: IMoviePayload}
+    | { type: 'PUSHNEWDATA', payload: IMoviePayload}
+    | { type: 'CLEARDATA'};
+
+export const HouseInitialState: HouseState = {
     value: {
         id: "",
         name: "",
@@ -32,38 +35,80 @@ export const initialState: State = {
     modalProdEditShow: false,
 };
 
-export const reducer = (state: State = initialState, action: Action): State => {
+export const MovieInitialState: MovieState = {
+    value: {
+        id: "",
+        movieName: "",
+        movieGenre: "",
+        ageFilmRatings: "",
+        productionHouseName: "",
+        defaultSelectedValue: "",
+        defaultSelectedValueHouse: "",
+    },
+    modalMovieAddShow: false,
+    modalMovieEditShow: false,
+}
+
+export const HouseReducer = (state: HouseState = HouseInitialState, action: Action): HouseState => {
     switch (action.type) {
-        case 'SETDISPLAY': {
-            return {
-                ...state,
-                modalProdAddShow: !state.modalProdAddShow
-            }
+        case 'TOGGLEMODALADD': {
+            return { ...state, modalProdAddShow: !state.modalProdAddShow }
         }
-        case 'SETNAME': {
-            return {
-                ...state,
-                value: {
+        case 'GETEDITDATA': {
+            return { ...state, value: {
                     id: action.payload.id,
                     name: action.payload.name
                 }
             }
         }
-        case 'SETMODEDIT': {
-            return {
-                ...state,
-                modalProdEditShow: !state.modalProdEditShow,
-            }
+        case 'TOGGLEMODALEDIT': {
+            return { ...state, modalProdEditShow: !state.modalProdEditShow,}
         }
-        case 'PUSHNEWSTATE': {
-            return {
-                ...state,
-                value: {
+        case 'PUSHNEWDATA': {
+            return { ...state, value: {
                     name: action.payload.name
                 }
             }
         }
         default:
             return state
+    }
+};
+
+
+export const MovieReducer = (state: MovieState = MovieInitialState, action: MovieAction): MovieState => {
+    switch (action.type) {
+        case 'TOGGLEMODALADD': {
+            return { ...state, modalMovieAddShow: !state.modalMovieAddShow }
+        }
+        case 'GETEDITDATA': {
+            return { ...state, value: {
+                    id: action.payload.id,
+                    movieName: action.payload.movieName,
+                    movieGenre: action.payload.movieGenre,
+                    productionHouseName: action.payload.productionHouseName,
+                    ageFilmRatings: action.payload.ageFilmRatings,
+                    defaultSelectedValue: action.payload.defaultSelectedValue
+                }
+            }
+        }
+        case 'TOGGLEMODALEDIT': {
+            return { ...state, modalMovieEditShow: !state.modalMovieEditShow,}
+        }
+        case 'PUSHNEWDATA': {
+            return { ...state, value: {
+                    movieName: action.payload.movieName,
+                    movieGenre: action.payload.movieGenre,
+                    productionHouseName: action.payload.productionHouseName,
+                    ageFilmRatings: action.payload.ageFilmRatings,
+                    defaultSelectedValue: action.payload.defaultSelectedValue
+                }
+            }
+        }
+        case 'CLEARDATA': {
+            return state
+        }
+        default:
+            throw new Error()
     }
 };

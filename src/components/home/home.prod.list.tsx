@@ -1,17 +1,11 @@
 
 import * as React from 'react'
 import "./home.scss";
-import * as Global from '../global/mod';
 
 const ProductionList: React.FC<{
     renderItems: any,
-    onClick: (e: any) => void,
+    onClick: (e: React.MouseEvent) => void,
 }> = (props) => {
-    const [display, setDisplay] = React.useState<{
-        show?: boolean,
-    }>({ show: false });
-
-
     return (
         <div style={{ position: 'relative' }}>
             <div className="box-production-container">

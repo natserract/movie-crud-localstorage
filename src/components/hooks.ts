@@ -1,17 +1,25 @@
 
 import * as React from 'react';
-import { Context, ContextDispatch } from '../context';
+import { MovieContext, ProdHouseContext, MovieContextDispatch, ProdHouseContextDispatch } from '../context';
 
 export function useCtx(){
-    const context = React.useContext(Context);
-    if(context === undefined) throw new Error('Must be used within a Provider');
-    return context
+    const HouseContext = React.useContext(ProdHouseContext);
+    const MovieContextT = React.useContext(MovieContext);
+    if(HouseContext && MovieContextT  === undefined) throw new Error('Must be used within a Provider');
+    return {
+        HouseContext,
+        MovieContextT
+    }
 }
 
 export function useCtxDispatch() {
-    const context = React.useContext(ContextDispatch);
-    if(context === undefined) throw new Error('Must be used within a Provider');
-    return context
+    const HouseContextDispatch = React.useContext(ProdHouseContextDispatch);
+    const MovieContextDispatchT = React.useContext(MovieContextDispatch);
+    if(HouseContextDispatch && MovieContextDispatchT  === undefined) throw new Error('Must be used within a Provider');
+    return {
+        HouseContextDispatch,
+        MovieContextDispatchT
+    }
 }
 
 export function useLocalStorageReducer<StateType, ActionType>(
@@ -57,12 +65,12 @@ export function useInitialState(defaultValue) {
     ]
 }
 
-export function useSaveStore<T=object>(storeState: T): boolean {
+export function useSaveStore<T=object>(storeState: T, key: string): boolean {
     if(!localStorage) return false;
 
     try {
         const serializedState = JSON.stringify(storeState);
-        localStorage.setItem('data', serializedState);
+        localStorage.setItem(key, serializedState);
         return true;
     } catch(err) {
         throw new Error('store deserialization failed');

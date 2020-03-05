@@ -5,6 +5,20 @@ export interface IProductionHouse {
     name?: string
 }
 
-export interface Provider {
+export interface ProductionHouseProvider {
     productionHouse: IProductionHouse[]
+}
+
+export interface IMoviePayload{
+    id?: string,
+    movieName: string,
+    productionHouseName: string,
+    movieGenre: string,
+    ageFilmRatings: string
+    defaultSelectedValue?: string,
+    defaultSelectedValueHouse?: string
+}
+
+export interface MovieProvider {
+    movie: IMoviePayload[]
 }

@@ -1,9 +1,13 @@
+$color: #0277bd;
 
 .content-production-house {
     background: #eff6fe;
     padding: 30px 16px;
 }
 
+.content-movie-list {
+    padding: 20px 0 50px;
+}
 .box-production-container {
     display: flex;
     flex-wrap: nowrap;
@@ -19,5 +23,26 @@
         margin-right: 20px;
         flex: 0 0 auto;
         text-align: center;
+    }
+}
+
+.box-movielist-content.box-production-content {
+    background: $color;
+    text-align: left;
+
+    .box-movie-list__title {
+        margin-bottom: 10px !important;
+    }
+
+    span {
+        display: block;
+        font-weight: 300;
+        line-height: 1.2em;
+        font-size: 13px !important;
+        margin-bottom: 5px;  
+
+        &.box-movie-list__ratings{
+            font-weight: 700;
+        }
     }
 }

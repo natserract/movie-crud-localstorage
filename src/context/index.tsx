@@ -1,22 +1,30 @@
 import * as React from 'react';
 import * as RootReducer from './context.reducer';
 import { useLocalStorageReducer } from '../components/hooks';
-import { Provider as StateType } from "./context.types";
-import { initialState } from '../data/data';
+import { ProductionHouseProvider as StateType, MovieProvider } from "./context.types";
+import { initialStateMovie, initialStateProdHouse } from '../data/data';
 
 type Dispatch = (action: RootReducer.Action) => void;
+type DispatchMovie = (action: RootReducer.MovieAction) => void;
 
-export const Context = React.createContext<StateType | undefined>(undefined);
-export const ContextDispatch = React.createContext<Dispatch | undefined>(undefined);
+export const ProdHouseContext = React.createContext<StateType | undefined>(undefined);
+export const MovieContext = React.createContext<MovieProvider | undefined>(undefined);
+export const ProdHouseContextDispatch = React.createContext<Dispatch | undefined>(undefined);
+export const MovieContextDispatch = React.createContext<DispatchMovie | undefined>(undefined);
 
 export function Store(props: React.PropsWithChildren<{}>) {
-    const [state, dispatch] = useLocalStorageReducer('data', RootReducer.reducer, initialState);
+    const [ProdHouseState, ProdHouseDispatch] = useLocalStorageReducer('house', RootReducer.ProductionHouseReducer, initialStateProdHouse);
+    const [MovieState, MovieDispatch] = useLocalStorageReducer('movie', RootReducer.MovieReducer, initialStateMovie);
 
     return (
-        <Context.Provider value={state}>
-            <ContextDispatch.Provider value={dispatch}>
-                {props.children}
-            </ContextDispatch.Provider>
-        </Context.Provider>
+        <ProdHouseContext.Provider value={ProdHouseState}>
+            <MovieContext.Provider value={MovieState}>
+                <ProdHouseContextDispatch.Provider value={ProdHouseDispatch}>
+                    <MovieContextDispatch.Provider value={MovieDispatch}>
+                        {props.children}
+                    </MovieContextDispatch.Provider>
+                </ProdHouseContextDispatch.Provider>
+            </MovieContext.Provider>
+        </ProdHouseContext.Provider>
     )
 }

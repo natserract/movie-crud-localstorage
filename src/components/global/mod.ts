@@ -3,7 +3,7 @@ import Container from './container';
 import Flex from './flex';
 import Fragment from './fragment';
 import Button from './button';
-import { ModalAddProd, ModalEditProd } from './modal';
+import { ModalAddProd, ModalEditProd, ModalAddMovie, ModalEditMovie } from './modal';
 
 export {
     Container,
@@ -11,5 +11,7 @@ export {
     Fragment,
     Button,
     ModalAddProd,
-    ModalEditProd
+    ModalEditProd,
+    ModalAddMovie,
+    ModalEditMovie
 }
