@@ -90,8 +90,8 @@ export const MovieReducer = (state: MovieProvider = initialStateMovie, action: M
             }) : item.push(el)
 
       })
-
-      localStorage.setItem('movie', JSON.stringify(item));
+      
+      useSaveStore(item, 'movie');
       return {
         movie: [...item]
       }   

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useCtxDispatch } from "../hooks";
 import { PropsFormAddMovie } from './modal.form';
 import { FormAddProd, FormEditProd, FormAddMovie, FormEditMovie } from './modal.form';
-import { MovieReducer, MovieInitialState } from '../home/home.action';
+import { MovieReducer, MovieInitialState, HouseInitialState, HouseReducer } from '../home/home.action';
 
 interface General {
     display: string,
@@ -15,15 +15,20 @@ interface CoreProps extends General{
     modalStyle?: React.CSSProperties,
     closeModal?: React.MouseEventHandler,
 }
-interface PropsI extends CoreProps, General {}
+interface PropsI extends CoreProps, General, SubmitI {}
 
-interface PropsEditI extends CoreProps, PropsI {
+interface SubmitI {
+    handleSubmit?: (e: React.FormEvent) => void
+}
+
+interface PropsEditI extends CoreProps, PropsI, SubmitI {
     deleteAction: (e: React.MouseEvent) => any,
     inputValue: {
         id: string,
         name: any
     },
 }
+
 
 interface AddMovieState {
     id?: string,
@@ -38,12 +43,12 @@ interface EditMovieState extends AddMovieState {
     defaultSelectedValueHouse: string,
 }
 
-interface PropsEditMovieI extends CoreProps, PropsI, EditMovieState{
+interface PropsEditMovieI extends CoreProps, PropsI, EditMovieState, SubmitI{
     deleteAction: (e: React.MouseEvent) => void,
-    handleSubmit: (e: React.FormEvent) => void,
+
 }
 
-interface PropsMovie extends PropsFormAddMovie, General {}
+interface PropsMovie extends PropsFormAddMovie, General, SubmitI {}
 
 export const ModalContainer: React.FC<PropsI> = (props) => {
     const style: React.CSSProperties = {
@@ -73,7 +78,6 @@ export const ModalContainer: React.FC<PropsI> = (props) => {
 
 export const ModalAddProd: React.FC<PropsI> = (props) => {
     const { HouseContextDispatch } = useCtxDispatch();
-    const [ movie, movieDispatch ] = React.useReducer(MovieReducer, MovieInitialState);
     const [state, setState] = React.useState<{ id?: string, name: string }>({
         id: "",
         name: ""
@@ -93,14 +97,10 @@ export const ModalAddProd: React.FC<PropsI> = (props) => {
             type: 'ADD',
             payload: state.name
         });
-        setState({ name: "" });
-        movieDispatch({
-            type:'TOGGLEMODALADD'
-        })
     }
 
     const propsMod = {
-        onSubmit: (e) => handleSubmit(e),
+        onSubmit: (e) => props.handleSubmit(e),
         onChange: (e) => handleChange(e),
         inputValue: state.name,
         closeModal: props.closeModal
@@ -131,20 +131,8 @@ export const ModalEditProd: React.FC<PropsEditI> = (props) => {
         });
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        HouseContextDispatch({
-            type: 'EDIT',
-            payload: {
-                id: state.id,
-                name: state.name
-            }
-        }),
-        setState({ name: "" });
-    }
-
     const propsMod = {
-        onSubmit: (e) => handleSubmit(e),
+        onSubmit: (e) => props.handleSubmit(e),
         onChange: (e) => handleChange(e),
         inputValue: state.name,
         closeModal: props.closeModal,
@@ -162,8 +150,6 @@ export const ModalEditProd: React.FC<PropsEditI> = (props) => {
 }
 
 export const ModalAddMovie: React.FC<PropsMovie> = (props) => {
-    const { MovieContextDispatchT } = useCtxDispatch();
-
     const [state, setState] = React.useState<AddMovieState>({
         movieName: "",
         movieGenre: "",
@@ -207,22 +193,8 @@ export const ModalAddMovie: React.FC<PropsMovie> = (props) => {
         }
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        MovieContextDispatchT({
-            type: 'ADD',
-            payload: {
-                ...state,
-                movieName: state.movieName,
-                productionHouseName: state.productionHouseName,
-                movieGenre: state.movieGenre,
-                ageFilmRatings: state.ageFilmRatings
-            }
-        });
-    }
-
     const propsMod = {
-        onSubmit: (e) => handleSubmit(e),
+        onSubmit: (e) => props.handleSubmit(e),
         onChange: (e) => handleChange(e),
         closeModal: props.closeModal,
         movieName: state.movieName,

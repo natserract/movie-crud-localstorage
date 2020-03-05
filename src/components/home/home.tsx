@@ -23,6 +23,16 @@ const Home = () => {
         },
         headerContent: "Add New Production House",
         display: house.modalProdAddShow ? 'block' : 'none',
+        handleSubmit: (event) => {
+            event.preventDefault();
+            HouseContextDispatch({
+                type: 'ADD',
+                payload: event.target.elements.name.value
+            });
+            houseDispatch({
+                type: 'TOGGLEMODALADD'
+            })
+        }
     };
 
     const modalEditProps = {
@@ -36,12 +46,31 @@ const Home = () => {
 
         deleteAction: () => {
             const confirm = window.confirm("Are you sure?");
-            confirm ? HouseContextDispatch({
-                type: 'DELETE',
-                payload: house.value.id
-            }) : false
+            if(confirm === true) {
+                HouseContextDispatch({
+                    type: 'DELETE',
+                    payload: house.value.id
+                });
+                houseDispatch({
+                    type: 'TOGGLEMODALEDIT'
+                }); 
+            } else {
+                return false
+            }
         },
-
+        handleSubmit: (event) => {
+            event.preventDefault();
+            HouseContextDispatch({
+                type: 'EDIT',
+                payload: {
+                    id: house.value.id,
+                    name: event.target.elements.name.value
+                }
+            });
+            houseDispatch({
+                type: 'TOGGLEMODALEDIT'
+            }); 
+        },
         inputValue: {
             id: house.value.id,
             name: house.value.name
@@ -60,6 +89,22 @@ const Home = () => {
         movieGenre: "Default",
         productionHouseName: "",
         ageFilmRatings: "",
+        handleSubmit: (event) => {
+            event.preventDefault();
+            MovieContextDispatchT({
+                type: 'ADD',
+                payload: {
+                    ...movie,
+                    movieName: event.target.elements.movie_name.value,
+                    movieGenre: event.target.elements.movie_genre.value,
+                    productionHouseName: event.target.elements.movie_prodhouse_name.value,
+                    ageFilmRatings: event.target.elements.movie_prodhouse_ratings.value,
+                }
+            });
+            movieDispatch({
+                type: 'TOGGLEMODALADD'
+            });
+        }
     }
 
     const modalEditMovieProps = {
@@ -72,11 +117,18 @@ const Home = () => {
         display: movie.modalMovieEditShow ? 'block' : 'none',
 
         deleteAction: () => {
-            window.confirm("Are you sure?");
-            confirm ? MovieContextDispatchT({
-                type: 'DELETE',
-                payload: movie.value.id
-            }) : false
+            const confirm = window.confirm("Are you sure?");
+            if(confirm === true) {
+                MovieContextDispatchT({
+                    type: 'DELETE',
+                    payload: movie.value.id
+                });
+                movieDispatch({
+                    type: 'TOGGLEMODALEDIT'
+                }); 
+            } else {
+                return false
+            }
         },
 
         handleSubmit: (e) => {
