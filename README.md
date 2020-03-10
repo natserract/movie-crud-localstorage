@@ -1,6 +1,6 @@
 # React Context LocalStorage + TypeScript
 
-The react-context-global-store is a global state management library built on the **React Context API** (React version 16 or above).Using it you can build a global state repository just like redux and reference these global states in a simple way in your internal business components. It's very small (less than 300 lines after packaging) and has a clean API.
+Context provides a way to pass data through the component tree without having to pass props down manually at every level. Using it you can build a global state repository just like redux and reference these global states in a simple way in your internal business components.
        
 ## Installation
    ```bash 
